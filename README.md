@@ -1,6 +1,6 @@
 # Data-Mining
 Repository ini dibuat untuk memenuhi mata kuliah Data Mining
-<h1>Penjelasan Data Mining "Preprocessing Data"<h1>
+<h1>Penjelasan Data Mining "Preprocessing Data"</h1>
   Beberapa library python yang harus ditambahkan
   <a> sklearn </a>
   <a> pandas </a>
