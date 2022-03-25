@@ -8,7 +8,7 @@ Repository ini dibuat untuk memenuhi mata kuliah Data Mining
 ```sh
   $ npm install -g csv2md
 ```
-```javascript
+```python
 from importlib import import_module
 import numpy as np
 import pandas as pd
