@@ -1,33 +1,43 @@
-from sklearn.tree import DecisionTreeClassifier
-# from sklearn import datasets
-# import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+data = pd.read_csv("cars.csv") 
+
+data.head(300)
+
+atributData = data.iloc[:,1:7].values
+labelData = data.iloc[:,8].values
+
+from sklearn.impute import SimpleImputer
+imp_mean = SimpleImputer(missing_values=np.nan, strategy='most_frequent')
+imp_mean.fit(atributData[:,1:7])
+atributData[:,1:7] = imp_mean.transform(atributData[:,1:7])
+
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+X_train, X_test, y_train, y_test = train_test_split(atributData, labelData, test_size=0.33, random_state=0)
+
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.fit_transform(X_test)
+
 from sklearn import tree
+classifier = tree.DecisionTreeClassifier(max_depth=3)
+classifier.fit(X_train, y_train)
 
-irisDataset = pd.read_csv("../Assignment-4/databus.csv", delimiter=',', header=0)
+y_pred = classifier.predict(X_test)
 
-irisDataset['jenis_armada'] = pd.factorize(irisDataset.jenis_armada)[0]
-# irisDataset = irisDataset.drop(labels="")
-irisDataset = irisDataset.to_numpy()
+from sklearn.metrics import accuracy_score
+accuracy_score(y_test, y_pred)
 
-dataTraining = np.concatenate((irisDataset[0:80,:],irisDataset[100:180,:]), axis=0)
-dataTesting = np.concatenate((irisDataset[80:100,:],irisDataset[180:200,:]), axis=0)
+from sklearn.metrics import confusion_matrix, classification_report
+confusion_matrix(y_test, y_pred)
 
-inputTraining = dataTraining[:,0:4]
-inputTesting = dataTesting[:,0:4]
-labelTraining = dataTraining[:,4]
-labelTesting = dataTesting[:,4]
+# print(classification_report(y_test, y_pred))
 
-model = tree.DecisionTreeClassifier()
-model = model.fit(inputTraining, labelTraining)
-
-hasilPrediksi = model.predict(inputTesting)
-print("label sebenarnya = ", labelTesting)
-print("hasil prediksi = ", hasilPrediksi)
-
-prediksiBenar = (hasilPrediksi == labelTesting).sum()
-prediksiSalah = (hasilPrediksi !=  labelTesting).sum()
-print("prediksi benar = ", prediksiBenar, " data")
-print("prediksi salah = ", prediksiSalah, " data")
-print("akurasi = ", prediksiBenar/(prediksiBenar + prediksiSalah) * 100, "%")
+plt.figure(figsize=(12,12))
+tree.plot_tree(classifier, feature_names=data.columns.values.tolist(), class_names=data.columns.values.tolist())
+plt.title("Decision tree trained on all the cars conditions")
+plt.show()
