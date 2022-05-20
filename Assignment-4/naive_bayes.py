@@ -8,16 +8,12 @@ from sklearn.metrics import confusion_matrix
 from matplotlib.colors import ListedColormap
 
 # import dataset
-dataset = pd.read_csv('databus.csv')
-X = dataset.iloc[:, [1, -2]].values
-y = dataset.iloc[:, -3].values
+dataset = pd.read_csv('dataset.csv')
+X = dataset.iloc[:, [1, 3]].values
+y = dataset.iloc[:, 2].values
 
 # splitting the dataset into the Training Set and Testing set
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
-# print('Xtrain : ', X_train)
-# # print(X_test)
-# # print(y_train)
-# # print(y_test)
 
 # Feature Scaling
 sc = StandardScaler()
